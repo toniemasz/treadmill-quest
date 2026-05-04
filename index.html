@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treadmill Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <!-- Główny Kontener -->
+    <div class="max-w-md mx-auto p-6">
+        
+        <!-- Nagłówek i XP -->
+        <header class="text-center py-8">
+            <h1 class="text-3xl font-bold text-orange-500">Treadmill Quest</h1>
+            <p class="text-gray-400">Poziom 1: Nowicjusz</p>
+        </header>
+
+        <!-- Pasek postępu (Placeholder) -->
+        <div class="bg-gray-800 rounded-full h-8 w-full overflow-hidden border border-gray-700">
+            <div id="progress-bar" class="bg-gradient-to-r from-orange-500 to-yellow-400 h-full w-[35%] transition-all duration-1000"></div>
+        </div>
+        <p class="text-right mt-2 text-sm text-gray-500">35 / 100 km</p>
+
+        <!-- Sekcja Osiągnięć -->
+        <div class="mt-10">
+            <h2 class="text-xl font-semibold mb-4">Milestony</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-800 p-4 rounded-xl border-2 border-orange-500">
+                    <span class="text-2xl">🍕</span>
+                    <p class="text-xs text-gray-400">25 km</p>
+                    <p class="font-bold">Pizza Party</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-xl opacity-50 border border-gray-700">
+                    <span class="text-2xl">👟</span>
+                    <p class="text-xs text-gray-400">100 km</p>
+                    <p class="font-bold">Nowe buty</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
