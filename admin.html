@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admina - Treadmill Quest</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="tailwind-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="font-sans min-h-screen p-6">
+    
+    <div id="admin-container" class="max-w-md mx-auto">
+        
+        <div id="login-section" class="bg-brand-card p-8 rounded-3xl border border-gray-800 shadow-2xl">
+            <h2 class="text-2xl font-black mb-6 text-center text-brand-primary uppercase italic tracking-wider">Panel Strażnika</h2>
+            <div class="space-y-4">
+                <input type="email" id="email" placeholder="Email" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700 focus:outline-none focus:border-brand-primary transition-all">
+                <input type="password" id="password" placeholder="Hasło" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700 focus:outline-none focus:border-brand-primary transition-all">
+                <button onclick="login()" class="w-full bg-brand-primary p-3 rounded-xl font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-lg">Zaloguj się</button>
+            </div>
+            <p id="login-error" class="text-red-500 text-sm mt-4 text-center hidden font-medium"></p>
+        </div>
+
+        <div id="admin-section" class="hidden">
+            <div class="flex justify-between items-center mb-6 px-2">
+                <h1 class="text-xl font-black text-brand-primary uppercase italic">Witaj, Adminie!</h1>
+                <button onclick="logout()" class="text-[10px] text-gray-500 hover:text-white uppercase font-bold tracking-widest">Wyloguj</button>
+            </div>
+
+            <div class="flex gap-2 mb-8 bg-brand-card p-1.5 rounded-2xl border border-gray-800">
+                <button onclick="showTab('workouts')" id="tab-btn-workouts" class="tab-btn flex-1 py-2 text-[10px] font-black rounded-xl transition-all bg-brand-primary text-white uppercase">Treningi</button>
+                <button onclick="showTab('milestones')" id="tab-btn-milestones" class="tab-btn flex-1 py-2 text-[10px] font-black rounded-xl transition-all text-gray-500 hover:text-white uppercase">Milestones</button>
+                <button onclick="showTab('locations')" id="tab-btn-locations" class="tab-btn flex-1 py-2 text-[10px] font-black rounded-xl transition-all text-gray-500 hover:text-white uppercase">Mapy</button>
+                <button onclick="showTab('ideas')" id="tab-btn-ideas" class="tab-btn flex-1 py-2 text-[10px] font-black rounded-xl transition-all text-gray-500 hover:text-white uppercase text-center">Pomysły</button>
+            </div>
+            
+            <div id="tab-content" class="space-y-10">
+                <div id="panel-ideas" class="tab-panel hidden">
+                    <h2 class="text-lg font-black mb-4 text-white uppercase tracking-tighter">💡 Skrzynka Pomysłów</h2>
+                    <div id="ideas-list" class="space-y-3">
+                    <!-- Tu wpadną pomysły -->
+                    </div>
+                </div>
+                <div id="panel-workouts" class="tab-panel">
+                    <div class="bg-brand-card p-6 rounded-3xl border border-gray-800 shadow-xl">
+                        <h2 class="text-lg font-black mb-4 text-white uppercase tracking-tighter">🚀 Dodaj Sesję</h2>
+                        <form id="workout-form" class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Dystans (km)</label>
+                                <input type="number" step="0.1" id="distance" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700 focus:outline-none focus:border-brand-primary" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Notatka</label>
+                                <input type="text" id="note" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700 focus:outline-none focus:border-brand-primary">
+                            </div>
+                            <button type="submit" class="w-full bg-brand-primary p-3 rounded-xl font-black uppercase tracking-widest hover:opacity-90">Wyślij na bazę</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="panel-milestones" class="tab-panel hidden">
+                    <div class="bg-brand-card p-6 rounded-3xl border border-gray-800 shadow-xl">
+                        <h2 class="text-lg font-black mb-4 text-white uppercase tracking-tighter">🎖️ Nowy Milestone</h2>
+                        <form id="milestone-form" class="space-y-4">
+                            <input type="text" id="ms-name" placeholder="Nazwa wyzwania" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700 focus:outline-none focus:border-yellow-500" required>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="number" id="ms-distance" placeholder="km" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700 focus:outline-none focus:border-yellow-500" required>
+                                <input type="text" id="ms-icon" placeholder="🏆" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700 text-center focus:outline-none focus:border-yellow-500">
+                            </div>
+                            <button type="submit" class="w-full bg-yellow-600 p-3 rounded-xl font-black uppercase tracking-widest hover:bg-yellow-500 transition-all">Stwórz Wyzwanie</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="panel-locations" class="tab-panel hidden">
+                    <div class="bg-brand-card p-6 rounded-3xl border border-gray-800 shadow-xl">
+                        <h2 class="text-lg font-black mb-4 text-white uppercase tracking-tighter">🌍 Nowy Cel Mapy</h2>
+                        <form id="location-form" class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Nazwa Miejsca (np. Berlin)</label>
+                                <input type="text" id="loc-name" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700 focus:outline-none focus:border-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Dystans od startu (km)</label>
+                                <input type="number" id="loc-distance" class="w-full bg-gray-800 p-3 rounded-xl border border-gray-700 focus:outline-none focus:border-blue-500" required>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 p-3 rounded-xl font-black uppercase tracking-widest hover:bg-blue-500 transition-all">Dodaj do trasy</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <p id="message" class="mt-6 text-center text-sm font-bold animate-pulse"></p>
+        </div>
+
+        <a href="index.html" class="block text-center mt-12 text-gray-600 hover:text-white text-[10px] uppercase font-black tracking-widest transition-all">← Powrót do licznika</a>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

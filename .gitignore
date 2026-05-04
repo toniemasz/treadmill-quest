@@ -1,0 +1,35 @@
+# --- SENSITIVE DATA (Najważniejsze!) ---
+# Tu trzymasz swoje klucze do Supabase - NIGDY ich nie publikuj
+config.js
+.env
+*.env.local
+
+# --- IDE & EDITORS ---
+# Pliki konfiguracyjne Twojego edytora (np. VS Code)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- SYSTEM FILES ---
+# Śmieci systemowe, których nikt inny nie potrzebuje
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- NODE / PACKAGES ---
+# Jeśli kiedykolwiek użyjesz npm lub zainstalujesz Tailwinda lokalnie
+node_modules/
+package-lock.json
+dist/
+.npm/
+
+# --- LOGS ---
+# Logi błędów
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

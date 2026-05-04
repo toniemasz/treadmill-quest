@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statystyki - Treadmill Quest</title>
+    
+    <!-- Silnik i konfiguracja motywu -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="tailwind-config.js"></script>
+    
+    <!-- Biblioteki i style -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="font-sans min-h-screen p-6">
+
+    <div class="max-w-xl mx-auto">
+        
+        <!-- NAGŁÓWEK -->
+        <header class="flex justify-between items-center py-8 px-2">
+            <h1 class="text-xl font-black text-brand-primary italic uppercase tracking-wider">Analityka Formy</h1>
+            <a href="index.html" class="text-[10px] font-black text-gray-500 hover:text-white uppercase tracking-widest transition-all">
+                ← Wróć
+            </a>
+        </header>
+
+        <!-- FILTRY CZASOWE -->
+        <div class="flex justify-center gap-2 mb-8 bg-brand-card p-1.5 rounded-2xl border border-gray-800 shadow-lg">
+            <button onclick="updateFilter('7d')" id="btn-7d" class="filter-btn flex-1 py-2 text-[10px] font-black rounded-xl transition-all text-gray-500 hover:text-white uppercase tracking-tighter">7 DNI</button>
+            <button onclick="updateFilter('30d')" id="btn-30d" class="filter-btn flex-1 py-2 text-[10px] font-black rounded-xl transition-all text-gray-500 hover:text-white uppercase tracking-tighter">30 DNI</button>
+            <button onclick="updateFilter('1y')" id="btn-1y" class="filter-btn flex-1 py-2 text-[10px] font-black rounded-xl transition-all text-gray-500 hover:text-white uppercase tracking-tighter">ROK</button>
+            <button onclick="updateFilter('all')" id="btn-all" class="filter-btn flex-1 py-2 text-[10px] font-black rounded-xl transition-all bg-brand-primary text-white uppercase tracking-tighter shadow-lg shadow-orange-900/20">WSZYSTKO</button>
+        </div>
+
+        <!-- KONTENER WYKRESU -->
+        <section class="bg-brand-card p-6 rounded-3xl border border-gray-800 shadow-2xl mb-8">
+            <h2 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-8 text-center">Dystans w czasie</h2>
+            <div class="relative h-64">
+                <canvas id="progressChart"></canvas>
+            </div>
+        </section>
+
+        <!-- PODSUMOWANIE (DANE WSTRZYKNIĘTE PRZEZ JS) -->
+        <div id="stats-summary" class="grid grid-cols-2 gap-4">
+            <!-- Loader -->
+            <div class="col-span-2 flex justify-center py-4">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-primary"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="stats.js"></script>
+</body>
+</html>

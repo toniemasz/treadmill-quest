@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Wyprawy - Treadmill Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="tailwind-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="font-sans min-h-screen p-6">
+
+    <div class="max-w-md mx-auto">
+        <header class="flex justify-between items-center mb-10 px-2">
+            <h1 class="text-xl font-black text-brand-primary italic uppercase tracking-wider">Pełna Trasa</h1>
+            <a href="index.html" class="text-[10px] font-black text-gray-500 hover:text-white uppercase tracking-widest transition-all">← Dashboard</a>
+        </header>
+
+        <!-- LISTA WSZYSTKICH LOKALIZACJI -->
+        <div id="full-locations-list" class="space-y-4">
+            <!-- Wstrzyknięte przez JS -->
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+
+        async function loadAllLocations() {
+            const [workoutsRes, locationsRes] = await Promise.all([
+                supabaseClient.from('workouts').select('distance'),
+                supabaseClient.from('locations').select('*').order('distance', { ascending: true })
+            ]);
+
+            const totalKm = workoutsRes.data.reduce((sum, w) => sum + (w.distance || 0), 0);
+            const list = document.getElementById('full-locations-list');
+            list.innerHTML = '';
+
+            locationsRes.data.forEach(loc => {
+                const isAchieved = totalKm >= loc.distance;
+                const div = document.createElement('div');
+                div.className = `p-5 rounded-3xl border transition-all duration-500 flex items-center justify-between 
+                    ${isAchieved ? 'bg-brand-card border-brand-primary/30 shadow-lg' : 'bg-brand-card/30 border-gray-800 opacity-50'}`;
+                
+                div.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <span class="text-2xl">${isAchieved ? '📍' : '☁️'}</span>
+                        <div>
+                            <p class="text-[10px] font-black ${isAchieved ? 'text-brand-primary' : 'text-gray-600'} uppercase">${loc.distance} km</p>
+                            <h3 class="font-black ${isAchieved ? 'text-white' : 'text-gray-700'} uppercase text-sm">${loc.name}</h3>
+                        </div>
+                    </div>
+                    ${isAchieved ? '<span class="text-[8px] font-black text-brand-primary italic">ODWIEDZONE</span>' : ''}
+                `;
+                list.appendChild(div);
+            });
+        }
+        loadAllLocations();
+    </script>
+</body>
+</html>
